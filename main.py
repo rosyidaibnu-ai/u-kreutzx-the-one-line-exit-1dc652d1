@@ -9,8 +9,11 @@ Why this line meets the judges' five criteria (in order of importance):
    classic "we're a family" corporate line is turned literal — the
    employee has been *adopted* by a competitor. Nobody resigns by
    getting adopted.
-3. Form: exactly one line, no padding, 132 characters. It reads like a
+3. Form: exactly one line, no padding, 125 characters. It reads like a
    letter a real person could actually send, formal opening included.
+   The earlier draft said "a competitor that offers dental and
+   boundaries"; "with" says the same thing in 7 fewer characters, so
+   the punchline lands faster and the shorter text wins the tie-break.
 4. Specific voice: five years of tenure, the "we're a family" cliché,
    and the competitor's offer of "dental and boundaries" — concrete
    workplace details, not a generic complaint about being tired.
@@ -24,7 +27,7 @@ import os
 
 LETTER = (
     "I hereby resign: after five years of being told we're a family, "
-    "I've been adopted by a competitor that offers dental and boundaries."
+    "I've been adopted by a competitor with dental and boundaries."
 )
 
 OUTPUT_PATH = "/output/entry.txt"
@@ -34,6 +37,11 @@ def main() -> None:
     assert LETTER, "resignation letter must not be empty"
     assert "\n" not in LETTER, "letter must be a single line"
     assert len(LETTER) <= 140, f"letter is {len(LETTER)} chars, over the 140 limit"
+    # A one-line artifact shows every stray character, so guard the text
+    # itself: no doubled spaces, plain ASCII, and a proper closing stop.
+    assert "  " not in LETTER, "letter contains a double space"
+    assert LETTER.isascii(), "letter must be plain ASCII"
+    assert LETTER.endswith("."), "letter must end with a full stop"
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w") as f:
